@@ -26,16 +26,16 @@ var rootURL = 'https://bb-election-api.herokuapp.com/'
     function listCandidates(candidate) {
       var listItem = $('<li></li>');
       // Creates the li tags for listing candidates
-      var voteForm = $('<form method="POST", class="votingform"></form>');
+      var voteForm = $('<form method="POST"</form>');
       // Inserts the form and POST method into each candidate instance.
-      var button = $('<input type="submit", value="VOTE!">');
+      var button = $('<button id="votebutton"><input type="submit", value="VOTE!"></button>');
       // Inserts the button into the form
       var hidden = $('<input type="hidden", name="name">');
       //Inserts the hidden input type to associate each candidate's list item with their actual identity.
 
     // NOW, LET'S PUT IT ALL TOGETHER. Oh jeez.
     listItem.html(
-      candidate.name + ' : ' + candidate.votes);
+    candidate.name + ' : ' + candidate.votes);
     //This should end up wrapped in the li tags. Now to add all the new stuff.
     voteForm.attr('action', rootURL + 'vote');
     // Instantiates the /vote page on submit action
@@ -46,16 +46,21 @@ var rootURL = 'https://bb-election-api.herokuapp.com/'
     return listItem.append(voteForm);
   };
     // Makes sure all the above jargon is packaged up nice and together before returning the final product. ... Right?
-  // $('#vote').on('click', function(makeVote) {
-  //   $.ajax({
-  //     url: $(this).attr('action'),
-  //     method: 'POST',
-  //     dataType: 'json',
-  //     data: $(this).serialize()
-  //   }).done(function(data){
-  //     var singlevote = candidates[i].votes;
-  //     singlevote ++;
-  //   });
-  // });
+    function makeVote() {
+      $('#votebutton').on('submit', function(e){
+        e.preventDefault();
+        // Halts the default action of the 'submit' button defined with class 'votingform'. Makes things asynchronous. IMPORTANT.
+        //Now do the AJAX.
+        $.ajax({
+          url: $(this).attr('action'),
+          method: $(this).attr('method'),
+          dataType: 'json',
+          data: $(this).serialize()
+        }).done(function(data){
+
+          //PUT THE LOG STUFF HERE. SUCCESS/FAIL/ALWAYS.
+        })
+      });
+    };
 
 });
